@@ -9,6 +9,7 @@ class UserAccount {
     this.email = null;
     this.password = null;
     this.roleId = null;
+    this.maxBids = null;
   }
 
   setId(id) {
@@ -29,6 +30,10 @@ class UserAccount {
 
   setRoleId(roleId) {
     this.roleId = roleId;
+  }
+
+  setMaxBids(maxBids) {
+    this.maxBids = maxBids;
   }
 
   static getAllUserAccounts() {
@@ -61,7 +66,7 @@ class UserAccount {
 
   createUserAccount() {
     const db = new sqlite3.Database(pathToDatabase);
-    db.run('INSERT INTO user_accounts (username, email, password, roleId) VALUES (?, ?, ?, ?)', [this.username, this.email, this.password, this.roleId], (err) => {
+    db.run('INSERT INTO user_accounts (username, email, password, roleId, maxBids) VALUES (?, ?, ?, ?, ?)', [this.username, this.email, this.password, this.roleId, this.maxBids], (err) => {
       if (err) {
         console.error(err.message);
       } else {
@@ -75,7 +80,7 @@ class UserAccount {
 
   updateUserAccount() {
     const db = new sqlite3.Database(pathToDatabase);
-    db.run('UPDATE user_accounts SET username = ?, email = ?, password = ?, roleId = ? WHERE id = ?', [this.username, this.email, this.password, this.roleId, this.id], (err) => {
+    db.run('UPDATE user_accounts SET username = ?, email = ?, password = ?, roleId = ?, maxBids = ? WHERE id = ?', [this.username, this.email, this.password, this.roleId, this.maxBids, this.id], (err) => {
       if (err) {
         console.error(err.message);
       }

@@ -84,9 +84,9 @@ app.get('/login', async (req, res) => {
 
 // Create a new user account
 app.post('/user-accounts', async (req, res) => {
-  const { username, email, password, roleId } = req.body;
+  const { username, email, password, roleId, maxBids } = req.body;
   const createUserAccount = new CreateUserAccount();
-  const created = await createUserAccount.createUserAccount(username, email, password, parseInt(roleId, 10));
+  const created = await createUserAccount.createUserAccount(username, email, password, parseInt(roleId, 10), parseInt(maxBids, 10));
   res.json({success: created});
 });
 
@@ -108,9 +108,9 @@ app.get('/user-accounts/:userId', async (req, res) => {
 // Update a user account
 app.put('/user-accounts/:userId', async (req, res) => {
   const userId = parseInt(req.params.userId, 10);
-  const { username, email, password, roleId } = req.body;
+  const { username, email, password, roleId, maxBids } = req.body;
   const updateUserAccount = new UpdateUserAccount();
-  const user = await updateUserAccount.updateUserAccount(userId, username, email, password, parseInt(roleId, 10));
+  const user = await updateUserAccount.updateUserAccount(userId, username, email, password, parseInt(roleId, 10), parseInt(maxBids, 10));
   res.json(user);
 });
 

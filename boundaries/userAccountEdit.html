@@ -34,6 +34,9 @@
             <label for="roleId">Role ID:</label>
             <input type="text" id="roleId" name="roleId" required><br><br>
 
+            <label for="maxBids">Max Bids:</label>
+            <input type="text" id="maxBids" name="maxBids" required><br><br>
+
             <button type="submit">Save Changes</button>
         </form>
     </div>
@@ -47,6 +50,7 @@
                 document.getElementById('email').value = user.email;
                 document.getElementById('password').value = user.password;
                 document.getElementById('roleId').value = user.roleId;
+                document.getElementById('maxBids').value = user.maxBids;
             });
 
         // Handle form submission

@@ -1,12 +1,13 @@
 const UserAccount = require('../entities/userAccount.js');
 
 class CreateUserAccount {
-  async createUserAccount(username, email, password, roleId) {
+  async createUserAccount(username, email, password, roleId, maxBids) {
     const user = new UserAccount();
     user.setUsername(username);
     user.setEmail(email);
     user.setPassword(password);
     user.setRoleId(roleId);
+    this.setMaxBids(maxBids);
     const created = await user.createUserAccount(); // This will insert the user into the database
     return created;
   }
@@ -25,13 +26,14 @@ class GetUserAccountById {
 }
 
 class UpdateUserAccount {
-  async updateUserAccount(userId, username, email, password, roleId) {
+  async updateUserAccount(userId, username, email, password, roleId, maxBids) {
     const user = new UserAccount();
     user.setId(userId);
     user.setUsername(username);
     user.setEmail(email);
     user.setPassword(password);
     user.setRoleId(roleId);
+    user.setMaxBids(maxBids);
     await user.updateUserAccount(); // This will update the user in the database
     return user;
   }

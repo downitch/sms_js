@@ -34,6 +34,9 @@
             <label for="roleId">Role ID:</label>
             <input type="text" id="roleId" name="roleId" required><br><br>
 
+            <label for="maxBids">Max Bids:</label>
+            <input type="text" id="maxBids" name="maxBids" required><br><br>
+
             <button type="submit" id="createButton">Create Account</button>
         </form>
     </div>
@@ -46,6 +49,7 @@
             const emailInput = document.getElementById('email');
             const passwordInput = document.getElementById('password');
             const roleIdInput = document.getElementById('roleId');
+            const maxBidsInput = document.getElementById('maxBids');
             fetch('/user-accounts', {
                 method: 'POST',
                 headers: {
@@ -55,7 +59,8 @@
                     username: usernameInput.value,
                     email: emailInput.value,
                     password: passwordInput.value,
-                    roleId: roleIdInput.value
+                    roleId: roleIdInput.value,
+                    maxBids: maxBidsInput.value
                 }),
             })
             .then(response => response.json())

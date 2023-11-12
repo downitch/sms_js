@@ -54,14 +54,38 @@
     <h1>Timeslots List</h1>
     <input type="text" id="searchInput" placeholder="Search by Timeslot ID">
     <button id="searchButton">Search</button>
+    <span>Max Bids: </span>
+    <input type="text" id="updateInput" placeholder="Set Max Bids">
+    <button id="updateButton">Update</button>
     <div id="weeksWrap"></div>
     <div id="timeslotDetails" style="display: none;"></div>
 
     <script>
         const searchInput = document.getElementById('searchInput');
         const searchButton = document.getElementById('searchButton');
+        const updateButton = document.getElementById('updateButton');
         const timeslotList = document.getElementById('weeksWrap');
         const timeslotDetails = document.getElementById('timeslotDetails');
+
+        const userId = parseInt(window.location.href.substring(window.location.href.lastIndexOf('/') + 1), 10);
+        // If a valid number is entered, fetch and display user details
+        if (!isNaN(userId)) {
+            fetch(`/user-accounts/${userId}`)
+                .then(response => {
+                    if (response.status === 200) {
+                        return response.json();
+                    } else {
+                        throw new Error('User account not found');
+                    }
+                })
+                .then(user => {
+                    window.localStorage.setItem("user", JSON.stringify(user));
+                    document.getElementById('updateInput').value = user.maxBids;
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        }
 
         // Fetch and display the list of timeslots
         fetch('/timeslots')
@@ -132,6 +156,29 @@
             timeslotList.style.display = 'none';
             timeslotDetails.innerHTML = `Timeframe: ${timeslot.timeframe}, Date: ${timeslot.date}`;
         };
+
+        updateButton.addEventListener('click', () => {
+            let userData = JSON.parse(window.localStorage.getItem('user'));
+            const reqData = {
+                ...userData,
+                maxBids: parseInt(document.getElementById('updateInput').value, 10)
+            };
+            if (reqData.maxBids >= 10) {
+                fetch(`/user-accounts/${window.location.href.substring(window.location.href.lastIndexOf('/') + 1)}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(reqData),
+                }).then(() => {
+                    if(alert('Max bids updated successfully')){}
+                    else window.location.href = `/dashboard/${reqData.id}`;
+                });
+            } else {
+                if(alert('Minimum bids amount is 10')){}
+                else window.location.href = `/dashboard/${reqData.id}`;
+            }
+        });
 
         const handleBidding = (event) => {
             event.preventDefault();

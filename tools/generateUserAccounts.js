@@ -8,7 +8,8 @@ db.run(`
     username TEXT NOT NULL,
     email TEXT NOT NULL,
     password TEXT NOT NULL,
-    roleId INTEGER NOT NULL
+    roleId INTEGER NOT NULL,
+    maxBids INTEGER NOT NULL
   )
 `);
 
@@ -18,11 +19,12 @@ for (let i = 1; i <= 100; i++) {
   const email = `user${i}@example.com`;
   const password = `password${i}`;
   const roleId = 1;
+  const maxBids = 10;
 
   db.run(`
-    INSERT INTO user_accounts (username, email, password, roleId)
-    VALUES (?, ?, ?, ?)
-  `, [username, email, password, roleId]);
+    INSERT INTO user_accounts (username, email, password, roleId, maxBids)
+    VALUES (?, ?, ?, ?, ?)
+  `, [username, email, password, roleId, maxBids]);
 }
 
 db.close();
