@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit User Account</title>
+    <style>
+        html, body {
+            padding: 0;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        #wrap {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <h1>Edit User Account</h1>
+        <form id="editForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required><br><br>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br><br>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br><br>
+
+            <label for="roleId">Role ID:</label>
+            <input type="text" id="roleId" name="roleId" required><br><br>
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+
+    <script>
+        // Fetch user account data and populate the form
+        fetch(`/user-accounts/${window.location.href.substring(window.location.href.lastIndexOf('/') + 1)}`)
+            .then(response => response.json())
+            .then(user => {
+                document.getElementById('username').value = user.username;
+                document.getElementById('email').value = user.email;
+                document.getElementById('password').value = user.password;
+                document.getElementById('roleId').value = user.roleId;
+            });
+
+        // Handle form submission
+        document.getElementById('editForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            // Send a PUT request to update the user account
+            fetch(`/user-accounts/${window.location.href.substring(window.location.href.lastIndexOf('/') + 1)}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            }).then(() => {
+                if(alert('User account updated successfully')){}
+                else window.location.href = '/admin';
+            });
+        });
+    </script>
+</body>
+</html>

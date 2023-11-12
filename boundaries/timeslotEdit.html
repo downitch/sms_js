@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Timeslot</title><style>
+        html, body {
+            padding: 0;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        #wrap {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <h1>Edit Timeslot</h1>
+        <form id="editForm">
+            <label for="timeframe">Timeframe:</label>
+            <input type="text" id="timeframe" name="timeframe" required><br><br>
+
+            <label for="date">Date:</label>
+            <input type="text" id="date" name="date" required><br><br>
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+
+    <script>
+        // Fetch user account data and populate the form
+        fetch(`/timeslots/${window.location.href.substring(window.location.href.lastIndexOf('/') + 1)}`)
+            .then(response => response.json())
+            .then(timeslot => {
+                document.getElementById('timeframe').value = timeslot.timeframe;
+                document.getElementById('date').value = timeslot.date;
+            });
+
+        // Handle form submission
+        document.getElementById('editForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            // Send a PUT request to update the timeslot
+            fetch(`/timeslots/${window.location.href.substring(window.location.href.lastIndexOf('/') + 1)}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            }).then(() => {
+                alert('Timeslot updated successfully');
+            });
+        });
+    </script>
+</body>
+</html>

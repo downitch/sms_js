@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manager Dashboard</title>
+    <style>
+      html, body {
+        padding: 0;
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      #timeslotList {
+        list-style-type: none;
+      }
+      #timeslotList li {
+        width: 50%;
+        background: #cecece;
+        margin-bottom: 3px;
+        padding: 5px 8px;
+      }
+      #weeksWrap {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        margin-top: 10px;
+      }
+      #weekLine {
+        display: flex;
+        flex-direction: row;
+      }
+      #weekItem {
+        display: flex;
+        flex-direction: column;
+        width: 270px;
+        height: 188px;
+        border: 1px solid black;
+        border-radius: 5px;
+        margin-right: 10px;
+        margin-bottom: 7px;
+        padding: 6px 10px;
+      }
+      #buttonHolder {
+        width: 98%;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+        text-align: center;
+      }
+      #opButton {
+        display: flex;
+        flex: 1;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+        margin-bottom: 15px;
+      }
+    </style>
+</head>
+<body>
+    <h1>Manager Dashboard</h1>
+    <div id="weeksWrap"></div>
+
+    <script>
+        const timeslotList = document.getElementById('weeksWrap');
+
+        fetch('/user-accounts')
+          .then(response => response.json())
+          .then(users => {
+            fetch('/timeslots')
+              .then(response => response.json())
+              .then(timeslots => {
+                fetch('/bids')
+                  .then(response => response.json())
+                  .then(bids => {
+                    timeslots.map(timeslot => {
+                      const accBids = bids.filter(bid => bid.bidOn == timeslot.id);
+                      const readyData = {
+                        ...timeslot,
+                        bids: accBids,
+                        users: users.filter(user => (accBids.map(b => b.bidBy)).includes(user.id)),
+                      };
+                      return readyData;
+                    }).reduce((all, one, i) => {
+                      const ch = Math.floor(i / 5); 
+                      all[ch] = [].concat((all[ch] || []), one); 
+                      return all;
+                    }, []).forEach(el => {
+                      const listItem = document.createElement('div');
+                      listItem.id = 'weekLine';
+                      el.forEach(timeslot => {
+                        let bidders = timeslot.bids.map(bid => {
+                          if(bid.bidOn == timeslot.id) {
+                            const bidder = timeslot.users.filter(user => user.id == bid.bidBy)[0];
+                            if(bidder) {
+                              const buttonHolder = document.createElement('div');
+                              const approveButt = document.createElement('button');
+                              const rejectButt = document.createElement('button');
+                              buttonHolder.id = 'buttonHolder';
+                              approveButt.id = 'approveUser';
+                              rejectButt.id = 'rejectUser';
+                              approveButt.onclick = () => {
+                                // approve
+                                handleButtonClick({
+                                  ...bid,
+                                  reviewedBy: 1,
+                                  approved: 1
+                                });
+                              };
+                              rejectButt.onclick = () => {
+                                // reject
+                                handleButtonClick({
+                                  ...bid,
+                                  reviewedBy: 1,
+                                  approved: -1
+                                });
+                              };
+                              approveButt.innerText = `approve`;
+                              rejectButt.innerText = `reject`;
+                              buttonHolder.innerHTML = `${bidder.username} (${bid.approved > 0 ? '✓' : bid.approved < 0 ? '✗' : 'new!'}): `;
+                              buttonHolder.appendChild(approveButt);
+                              buttonHolder.appendChild(rejectButt);
+                              return buttonHolder;
+                            }
+                          }
+                        });
+                        const hrefItem = document.createElement('a');
+                        const item = document.createElement('div');
+                        const holder = document.createElement('div');
+                        holder.id = 'buttonHolder';
+                        item.id = 'weekItem';
+                        item.innerHTML = `<span><b>Shift</b>: ${timeslot.timeframe}</span><span><b>Date</b>: ${timeslot.date}</span><span><b>Bids</b>: ${timeslot.bids.length}</span>`;
+                        const editButton = document.createElement('button');
+                        editButton.id = 'opButton';
+                        editButton.onclick = () => {
+                          window.location.href = `/owner/edit/${timeslot.id}`;
+                        };
+                        editButton.innerText = 'Edit';
+                        // holder.append(editButton);
+                        const assignButton = document.createElement('button');
+                        assignButton.id = 'opButton';
+                        assignButton.onclick = () => {
+                          window.location.href = `/manager/assign/${timeslot.id}`;
+                        };
+                        assignButton.innerText = 'Assign by User Account ID';
+                        holder.append(assignButton);
+                        item.append(holder);
+                        bidders.forEach(bidder => bidder ? item.appendChild(bidder) : null);
+                        listItem.appendChild(item);
+                      });
+                      timeslotList.appendChild(listItem);
+                    });
+                  });
+              });
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+          });
+
+
+        const handleButtonClick = (updatedBidData) => {
+            fetch(`/bids/${updatedBidData.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedBidData),
+            })
+            .then(response => {
+                if (response.status === 200) {
+                  if(alert('Bid edited successfully')){}
+                  else window.location.reload();
+                } else {
+                  if(alert('Error editing bid')){}
+                  else window.location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Network error:', error);
+            });
+        };
+    </script>
+</body>
+</html>

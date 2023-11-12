@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <style>
+        html, body {
+            padding: 0;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        #wrap {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: row;
+        }
+        #leftSide {
+            width: 80%;
+            height: 100%;
+            background: #38697A;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 27pt;
+            text-shadow: 1px 1px 1px rgba(0,0,0,1);
+        }
+        #rightSide {
+            width: 20%;
+            height: 100%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <div id="leftSide">
+            <h1>Staff Management System</h1>
+        </div>
+        <div id="rightSide">
+            <h1>Login</h1>
+            <div id="errorMessage" style="color: red; display: none;">Wrong username or password</div>
+            <form id="loginForm" action="/login" method="POST">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required><br><br>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required><br><br>
+
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const errorMessage = document.getElementById('errorMessage');
+        const loginForm = document.getElementById('loginForm');
+
+        loginForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const formData = new FormData(loginForm);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            fetch('/user-accounts/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(!data.roleId) {
+                    errorMessage.style.display = 'block';
+                    setTimeout(() => {
+                        errorMessage.style.display = 'none';
+                    }, 5000); // Display error message for 5 seconds
+                } else {
+                    if(data.roleId == 4) {
+                        window.location.href = '/admin';
+                    } else if(data.roleId == 3) {
+                        window.location.href = '/manager';
+                    } else if(data.roleId == 2) {
+                        window.location.href = '/owner';
+                    } else if(data.roleId == 1) {
+                        window.location.href = `/dashboard/${data.id}`;
+                    } else {
+                        window.location.href = '/login';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Account Creation</title>
+    <style>
+        html, body {
+            padding: 0;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        #wrap {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <h1>Create a User Account</h1>
+        <form action="/user-accounts" method="POST">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required><br><br>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br><br>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br><br>
+
+            <label for="roleId">Role ID:</label>
+            <input type="text" id="roleId" name="roleId" required><br><br>
+
+            <button type="submit" id="createButton">Create Account</button>
+        </form>
+    </div>
+
+    <script>
+        const createButton = document.getElementById('createButton');
+
+        const handleCreate = () => {
+            const usernameInput = document.getElementById('username');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const roleIdInput = document.getElementById('roleId');
+            fetch('/user-accounts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: usernameInput.value,
+                    email: emailInput.value,
+                    password: passwordInput.value,
+                    roleId: roleIdInput.value
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // User created successfully
+                    if(alert('User created successfully')){}
+                    else window.location.href = '/admin/list';
+                } else {
+                    // Handle errors or display a message
+                    alert('Error creating user');
+                }
+            })
+            .catch(error => {
+                if(alert('Network error')){}
+                else window.location.reload();
+            });
+        };
+
+        createButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleCreate();
+        });
+    </script>
+</body>
+</html>

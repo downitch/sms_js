@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Account List</title>
+    <style>
+        html, body {
+            padding: 0;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        #userList {
+            list-style-type: none;
+        }
+        #userList li {
+            width: 50%;
+            background: #cecece;
+            margin-bottom: 3px;
+            padding: 5px 8px;
+            display: flex;
+            flex-direction: row;
+        }
+        #infoField {
+            width: 70%;
+        }
+        #infoField:hover {
+            cursor: pointer;
+        }
+        #deleteButton {
+            width: 30%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        #deleteButton:hover {
+            cursor: pointer;
+        }
+        #actualButton {
+            background: #851616;
+            border-radius: 8px;
+            padding: 8px 20px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Account List</h1>
+    <button id="logoutButton">Log Out</button>
+    <br />
+    <br />
+    <input type="text" id="searchInput" placeholder="Search by User ID">
+    <button id="searchButton">Search</button>
+    <button id="createNewUserAccountButton">Create New User Account</button>
+    <ul id="userList"></ul>
+    <div id="userDetails" style="display: none;"></div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const logoutButton = document.getElementById('logoutButton');
+        const searchButton = document.getElementById('searchButton');
+        const createButton = document.getElementById('createNewUserAccountButton');
+        const userList = document.getElementById('userList');
+        const userDetails = document.getElementById('userDetails');
+
+        fetch('/user-accounts')
+            .then(response => response.json())
+            .then(users => {
+                users.forEach(user => {
+                    const listItem = document.createElement('li');
+                    const userInfo = document.createElement('div');
+                    const deleteUA = document.createElement('div');
+                    userInfo.id = 'infoField';
+                    deleteUA.id = 'deleteButton';
+                    userInfo.innerHTML = `<span><b>User ID</b>: ${user.id}<br /><b>Username</b>: ${user.username}<br /><b>Email</b>: ${user.email}<br /><b>Role ID</b>: ${user.roleId}</span>`;
+                    userInfo.addEventListener('click', () => {
+                        window.location.href = `/admin/edit/${user.id}`;
+                    });
+                    deleteUA.innerHTML = `<div id='actualButton'><span>Delete</span></div>`;
+                    deleteUA.addEventListener('click', () => { deleteUserAccount(user.id) });
+                    listItem.appendChild(userInfo);
+                    listItem.appendChild(deleteUA);
+                    userList.appendChild(listItem);
+                });
+            })
+            .catch(error => {
+                userList.innerHTML = 'Error fetching users';
+            });
+
+        // Function to show user details
+        const showUserDetails = (user) => {
+            userDetails.style.display = 'block';
+            userList.style.display = 'none';
+            userDetails.innerHTML = `<span><b>User ID</b>: ${user.id}<br /><b>Username</b>: ${user.username}<br /><b>Email</b>: ${user.email}<br /><b>Role ID</b>: ${user.roleId}</span>`;;
+        };
+
+        const deleteUserAccount = (userId) => {
+            fetch(`/user-accounts/${userId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => {
+                if (response.status === 204) {
+                    // User deleted successfully
+                    if(alert('User deleted successfully')){}
+                    else window.location.reload();
+                } else {
+                    // Handle errors or display a message
+                    if(alert('Error deleting user')){}
+                    else window.location.reload();
+                }
+            })
+            .catch(error => {
+                if(alert('Network error')){}
+                else window.location.reload();
+            });
+        }
+
+        // Function to handle search
+        const handleSearch = () => {
+            const userId = parseInt(searchInput.value, 10);
+
+            // If a valid number is entered, fetch and display user details
+            if (!isNaN(userId)) {
+                fetch(`/user-accounts/${userId}`)
+                    .then(response => {
+                        if (response.status === 200) {
+                            return response.json();
+                        } else {
+                            throw new Error('User account not found');
+                        }
+                    })
+                    .then(user => {
+                        showUserDetails(user);
+                    })
+                    .catch(error => {
+                        userDetails.innerHTML = `No user account found with this ID`;
+                    });
+            } else {
+                userDetails.style.display = 'none';
+                userList.style.display = 'block';
+            }
+        };
+
+        // Event listener for the search button
+        searchButton.addEventListener('click', handleSearch);
+
+        // Event listener for the logout button
+        logoutButton.addEventListener('click', () => {
+            window.location.href = '/login';
+        });
+
+        // Event listener for the create button
+        createButton.addEventListener('click', () => {
+            window.location.href = '/admin/create'
+        });
+
+        // Event listener for Enter key in the search input
+        searchInput.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') {
+                handleSearch();
+            }
+        });
+    </script>
+</body>
+</html>

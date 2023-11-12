@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign Bid</title>
+    <style>
+      html, body {
+        padding: 0;
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+    </style>
+</head>
+<body>
+    <h1>Assign Bid</h1>
+    <form id="editBidForm">
+        <label for="approved">Approved:</label>
+        <select id="approved" name="approved">
+            <option value="true" selected="true">Yes</option>
+        </select><br><br>
+        <label for="bidBy">Assigned To:</label>
+        <input type="text" id="bidBy" name="bidBy" placeholder="User Account ID" required><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        const editBidForm = document.getElementById('editBidForm');
+
+        editBidForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            // Get the updated bid data from the form
+            const updatedBidData = {
+                bidOn: window.location.href.substring(window.location.href.lastIndexOf('/') + 1),
+                bidBy: parseInt(document.getElementById('bidBy').value, 10),
+                approved: document.getElementById('approved').value === 'true',
+                reviewedBy: 1,
+            };
+
+            // Send the POST request to edit the bid
+            fetch('/bids', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedBidData),
+            })
+            .then(response => {
+                if (response.status === 200) {
+                  if(alert('Bid assigned successfully')){}
+                  else window.location.href = '/manager';
+                } else {
+                  if(alert('Error assigning bid')){}
+                  else window.location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Network error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
