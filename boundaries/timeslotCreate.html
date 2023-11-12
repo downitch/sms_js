@@ -35,7 +35,7 @@
     <script>
         const createButton = document.getElementById('createButton');
 
-        const handleCreate = () => {
+        const clickSubmit = () => {
             const timeframeInput = document.getElementById('timeframe');
             const dateInput = document.getElementById('date');
             fetch('/timeslots', {
@@ -50,15 +50,17 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-                if (data.success) {
-                    // Timeslot created successfully
-                    if(alert('Timeslot created successfully')){}
-                    else window.location.href = '/owner/list';
-                } else {
-                    // Handle errors or display a message
-                    alert('Error creating timeslot');
-                }
+                const displaySuccessMessage = () => {
+                    if (data.success) {
+                        // Timeslot created successfully
+                        if(alert('Timeslot created successfully')){}
+                        else window.location.href = '/owner/list';
+                    } else {
+                        // Handle errors or display a message
+                        alert('Error creating timeslot');
+                    }
+                };
+                displaySuccessMessage();
             })
             .catch(error => {
                 if(alert('Network error')){}
@@ -68,7 +70,7 @@
 
         createButton.addEventListener('click', (e) => {
             e.preventDefault();
-            handleCreate();
+            clickSubmit();
         });
     </script>
 </body>

@@ -56,49 +56,46 @@
         const timeslotList = document.getElementById('weeksWrap');
         const timeslotDetails = document.getElementById('timeslotDetails');
 
-        // Fetch and display the list of timeslots
-        fetch('/timeslots')
-            .then(response => response.json())
-            .then(timeslots => {
-                const split = timeslots.reduce((all,one,i) => {
-                    const ch = Math.floor(i/7); 
-                    all[ch] = [].concat((all[ch]||[]),one); 
-                    return all;
-                }, []);
-                split.forEach(el => {
-                    const listItem = document.createElement('div');
-                    listItem.id = 'weekLine';
-                    el.forEach(timeslot => {
-                        const hrefItem = document.createElement('a');
-                        const item = document.createElement('div');
-                        const detailsButton = document.createElement('button');
-                        const deleteButton = document.createElement('button');
-                        detailsButton.innerText = 'Edit';
-                        deleteButton.innerText = 'Delete';
-                        detailsButton.onclick = () => { window.location.href = `/owner/edit/${timeslot.id}`; };
-                        deleteButton.onclick = () => { deleteTimeslot(timeslot.id); };
-                        item.id = 'weekItem';
-                        item.innerHTML = `<span><b>Shift</b>: ${timeslot.timeframe}</span><span><b>Date</b>: ${timeslot.date}<span>`;
-                        item.appendChild(detailsButton);
-                        item.appendChild(deleteButton);
-                        listItem.append(item);
+        const displayTimeslots = () => {
+            // Fetch and display the list of timeslots
+            fetch('/timeslots')
+                .then(response => response.json())
+                .then(timeslots => {
+                    const split = timeslots.reduce((all,one,i) => {
+                        const ch = Math.floor(i/7); 
+                        all[ch] = [].concat((all[ch]||[]),one); 
+                        return all;
+                    }, []);
+                    split.forEach(el => {
+                        const listItem = document.createElement('div');
+                        listItem.id = 'weekLine';
+                        el.forEach(timeslot => {
+                            const hrefItem = document.createElement('a');
+                            const item = document.createElement('div');
+                            const detailsButton = document.createElement('button');
+                            const deleteButton = document.createElement('button');
+                            detailsButton.innerText = 'Edit';
+                            deleteButton.innerText = 'Delete';
+                            detailsButton.onclick = () => { window.location.href = `/owner/edit/${timeslot.id}`; };
+                            deleteButton.onclick = () => { clickDeleteButton(timeslot.id); };
+                            item.id = 'weekItem';
+                            item.innerHTML = `<span><b>Shift</b>: ${timeslot.timeframe}</span><span><b>Date</b>: ${timeslot.date}<span>`;
+                            item.appendChild(detailsButton);
+                            item.appendChild(deleteButton);
+                            listItem.append(item);
+                        });
+                        timeslotList.appendChild(listItem);
                     });
-                    timeslotList.appendChild(listItem);
+                })
+                .catch(error => {
+                    timeslotList.innerHTML = 'Error fetching timeslots';
                 });
-            })
-            .catch(error => {
-                timeslotList.innerHTML = 'Error fetching timeslots';
-            });
-
-        // Function to show timeslot details
-        const showTimeslotDetails = (timeslot) => {
-            timeslotDetails.style.display = 'block';
-            timeslotList.style.display = 'none';
-            timeslotDetails.innerHTML = `Timeframe: ${timeslot.timeframe}, Date: ${timeslot.date}`;
         };
 
+        displayTimeslots();
+
         // Function to handle search
-        const handleSearch = () => {
+        const searchButtonClick = () => {
             const timeslotId = parseInt(searchInput.value, 10);
 
             // If a valid number is entered, fetch and display timeslot details
@@ -112,7 +109,12 @@
                         }
                     })
                     .then(timeslot => {
-                        showTimeslotDetails(timeslot);
+                        const displayTimeslot = () => {
+                            timeslotDetails.style.display = 'block';
+                            timeslotList.style.display = 'none';
+                            timeslotDetails.innerHTML = `Timeframe: ${timeslot.timeframe}, Date: ${timeslot.date}`;
+                        };
+                        displayTimeslot();
                     })
                     .catch(error => {
                         timeslotDetails.innerHTML = 'No timeslot found with this ID';
@@ -123,7 +125,7 @@
             }
         };
 
-        const deleteTimeslot = (timeslotId) => {
+        const clickDeleteButton = (timeslotId) => {
             fetch(`/timeslots/${timeslotId}`, {
                 method: 'DELETE',
                 headers: {
@@ -131,15 +133,18 @@
                 },
             })
             .then(response => {
-                if (response.status === 204) {
-                    // Timeslot deleted successfully
-                    if(alert('Timeslot deleted successfully')){}
-                    else window.location.reload();
-                } else {
-                    // Handle errors or display a message
-                    if(alert('Error deleting timeslot')){}
-                    else window.location.reload();
+                const displaySuccessMessage = () => {
+                    if (response.status === 204) {
+                        // Timeslot deleted successfully
+                        if(alert('Timeslot deleted successfully')){}
+                        else window.location.reload();
+                    } else {
+                        // Handle errors or display a message
+                        if(alert('Error deleting timeslot')){}
+                        else window.location.reload();
+                    }
                 }
+                displaySuccessMessage();
             })
             .catch(error => {
                 if(alert('Network error')){}
@@ -148,7 +153,7 @@
         }
 
         // Event listener for the search button
-        searchButton.addEventListener('click', handleSearch);
+        searchButton.addEventListener('click', searchButtonClick);
 
         // Event listener for the create button
         createButton.addEventListener('click', () => {
@@ -158,7 +163,7 @@
         // Event listener for Enter key in the search input
         searchInput.addEventListener('keyup', (event) => {
             if (event.key === 'Enter') {
-                handleSearch();
+                searchButtonClick();
             }
         });
     </script>

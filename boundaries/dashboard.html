@@ -87,8 +87,13 @@
                 });
         }
 
-        // Fetch and display the list of timeslots
-        fetch('/timeslots')
+        const displayTimeslots = () => {
+            return fetch('/timeslots');
+        }
+
+        const displayBids = () => {
+            // Fetch and display the list of timeslots
+            displayTimeslots()
             .then(response => response.json())
             .then(timeslots => {
                 fetch('/bids')
@@ -125,7 +130,7 @@
                                             removeButton.id = 'opButton';
                                             removeButton.innerText = 'Remove Bid';
                                             removeButton.bidId = bid.id;
-                                            removeButton.onclick = handleRemoveBidding;
+                                            removeButton.onclick = clickRemoveButton;
                                             item.appendChild(removeButton);
                                         }
                                     });
@@ -135,7 +140,7 @@
                                     bidOnButt.tid = timeslot.id;
                                     bidOnButt.uid = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
                                     bidOnButt.id = 'opButton';
-                                    bidOnButt.onclick = handleBidding;
+                                    bidOnButt.onclick = clickBidButton;
                                     item.appendChild(bidOnButt);
                                 }
                             });
@@ -149,6 +154,12 @@
             .catch(error => {
                 timeslotList.innerHTML = 'Error fetching timeslots';
             });
+        };
+
+        const displayProcessedBids = displayBids;
+
+        displayBids();
+        displayProcessedBids();
 
         // Function to show timeslot details
         const showTimeslotDetails = (timeslot) => {
@@ -157,7 +168,7 @@
             timeslotDetails.innerHTML = `Timeframe: ${timeslot.timeframe}, Date: ${timeslot.date}`;
         };
 
-        updateButton.addEventListener('click', () => {
+        const clickUpdate = () => {
             let userData = JSON.parse(window.localStorage.getItem('user'));
             const reqData = {
                 ...userData,
@@ -171,16 +182,24 @@
                 },
                 body: JSON.stringify(reqData),
                 }).then(() => {
-                    if(alert('Max bids updated successfully')){}
-                    else window.location.href = `/dashboard/${reqData.id}`;
+                    const displaySuccessMessage = () => {
+                        if(alert('Max bids updated successfully')){}
+                        else window.location.href = `/dashboard/${reqData.id}`;
+                    }
+                    displaySuccessMessage();
                 });
             } else {
-                if(alert('Minimum bids amount is 10')){}
-                else window.location.href = `/dashboard/${reqData.id}`;
+                const displaySuccessMessage = () => {
+                    if(alert('Minimum bids amount is 10')){}
+                    else window.location.href = `/dashboard/${reqData.id}`;
+                }
+                displaySuccessMessage();
             }
-        });
+        };
 
-        const handleBidding = (event) => {
+        updateButton.addEventListener('click', clickUpdate);
+
+        const clickBidButton = (event) => {
             event.preventDefault();
 
             // Get the updated bid data from the form
@@ -200,20 +219,23 @@
                 body: JSON.stringify(updatedBidData),
             })
             .then(response => {
-                if (response.status === 200) {
-                  if(alert('Bidded successfully')){}
-                  else window.location.reload();
-                } else {
-                  if(alert('Error bidding')){}
-                  else window.location.reload();
-                }
+                const displaySuccessMessage = () => {
+                    if (response.status === 200) {
+                        if(alert('Bidded successfully')){}
+                        else window.location.reload();
+                    } else {
+                        if(alert('Error bidding')){}
+                        else window.location.reload();
+                    }
+                };
+                displaySuccessMessage();
             })
             .catch(error => {
                 console.error('Network error:', error);
             });
         };
 
-        const handleRemoveBidding = (event) => {
+        const clickRemoveButton = (event) => {
             event.preventDefault();
 
             // Send the DELETE request to delete the bid
@@ -224,13 +246,16 @@
                 },
             })
             .then(response => {
-                if (response.status === 204) {
-                  if(alert('Bid removed successfully')){}
-                  else window.location.reload();
-                } else {
-                  if(alert('Error removing bid')){}
-                  else window.location.reload();
-                }
+                const displaySuccessMessage = () => {
+                    if (response.status === 204) {
+                        if(alert('Bid removed successfully')){}
+                        else window.location.reload();
+                    } else {
+                        if(alert('Error removing bid')){}
+                        else window.location.reload();
+                    }
+                };
+                displaySuccessMessage();
             })
             .catch(error => {
                 console.error('Network error:', error);

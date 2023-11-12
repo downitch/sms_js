@@ -61,8 +61,7 @@
         const errorMessage = document.getElementById('errorMessage');
         const loginForm = document.getElementById('loginForm');
 
-        loginForm.addEventListener('submit', (event) => {
-            event.preventDefault();
+        const loginButtonClick = () => {
             const formData = new FormData(loginForm);
             const data = {};
             formData.forEach((value, key) => {
@@ -78,25 +77,33 @@
             })
             .then(response => response.json())
             .then(data => {
-                if(!data.roleId) {
-                    errorMessage.style.display = 'block';
-                    setTimeout(() => {
-                        errorMessage.style.display = 'none';
-                    }, 5000); // Display error message for 5 seconds
-                } else {
-                    if(data.roleId == 4) {
-                        window.location.href = '/admin';
-                    } else if(data.roleId == 3) {
-                        window.location.href = '/manager';
-                    } else if(data.roleId == 2) {
-                        window.location.href = '/owner';
-                    } else if(data.roleId == 1) {
-                        window.location.href = `/dashboard/${data.id}`;
+                const redirectByRoleId = () => {
+                    if(!data.roleId) {
+                        errorMessage.style.display = 'block';
+                        setTimeout(() => {
+                            errorMessage.style.display = 'none';
+                        }, 5000); // Display error message for 5 seconds
                     } else {
-                        window.location.href = '/login';
+                        if(data.roleId == 4) {
+                            window.location.href = '/admin';
+                        } else if(data.roleId == 3) {
+                            window.location.href = '/manager';
+                        } else if(data.roleId == 2) {
+                            window.location.href = '/owner';
+                        } else if(data.roleId == 1) {
+                            window.location.href = `/dashboard/${data.id}`;
+                        } else {
+                            window.location.href = '/login';
+                        }
                     }
                 }
+                redirectByRoleId();
             });
+        }
+
+        loginForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            loginButtonClick();
         });
     </script>
 </body>

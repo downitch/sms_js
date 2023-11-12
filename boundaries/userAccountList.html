@@ -63,7 +63,8 @@
         const userList = document.getElementById('userList');
         const userDetails = document.getElementById('userDetails');
 
-        fetch('/user-accounts')
+        const displayUserAccounts = () => {
+            fetch('/user-accounts')
             .then(response => response.json())
             .then(users => {
                 users.forEach(user => {
@@ -77,7 +78,7 @@
                         window.location.href = `/admin/edit/${user.id}`;
                     });
                     deleteUA.innerHTML = `<div id='actualButton'><span>Delete</span></div>`;
-                    deleteUA.addEventListener('click', () => { deleteUserAccount(user.id) });
+                    deleteUA.addEventListener('click', () => { clickDeleteButton(user.id) });
                     listItem.appendChild(userInfo);
                     listItem.appendChild(deleteUA);
                     userList.appendChild(listItem);
@@ -86,15 +87,11 @@
             .catch(error => {
                 userList.innerHTML = 'Error fetching users';
             });
-
-        // Function to show user details
-        const showUserDetails = (user) => {
-            userDetails.style.display = 'block';
-            userList.style.display = 'none';
-            userDetails.innerHTML = `<span><b>User ID</b>: ${user.id}<br /><b>Username</b>: ${user.username}<br /><b>Email</b>: ${user.email}<br /><b>Role ID</b>: ${user.roleId}</span>`;;
         };
 
-        const deleteUserAccount = (userId) => {
+        displayUserAccounts();
+
+        const clickDeleteButton = (userId) => {
             fetch(`/user-accounts/${userId}`, {
                 method: 'DELETE',
                 headers: {
@@ -102,15 +99,18 @@
                 },
             })
             .then(response => {
-                if (response.status === 204) {
-                    // User deleted successfully
-                    if(alert('User deleted successfully')){}
-                    else window.location.reload();
-                } else {
-                    // Handle errors or display a message
-                    if(alert('Error deleting user')){}
-                    else window.location.reload();
+                const displaySuccessMessage = () => {
+                    if (response.status === 204) {
+                        // User deleted successfully
+                        if(alert('User deleted successfully')){}
+                        else window.location.reload();
+                    } else {
+                        // Handle errors or display a message
+                        if(alert('Error deleting user')){}
+                        else window.location.reload();
+                    }
                 }
+                displaySuccessMessage();
             })
             .catch(error => {
                 if(alert('Network error')){}
@@ -119,7 +119,7 @@
         }
 
         // Function to handle search
-        const handleSearch = () => {
+        const searchButtonClick = () => {
             const userId = parseInt(searchInput.value, 10);
 
             // If a valid number is entered, fetch and display user details
@@ -133,7 +133,13 @@
                         }
                     })
                     .then(user => {
-                        showUserDetails(user);
+                        // Function to show user details
+                        const displayUserAccount = () => {
+                            userDetails.style.display = 'block';
+                            userList.style.display = 'none';
+                            userDetails.innerHTML = `<span><b>User ID</b>: ${user.id}<br /><b>Username</b>: ${user.username}<br /><b>Email</b>: ${user.email}<br /><b>Role ID</b>: ${user.roleId}</span>`;;
+                        };
+                        displayUserAccount();
                     })
                     .catch(error => {
                         userDetails.innerHTML = `No user account found with this ID`;
@@ -145,7 +151,7 @@
         };
 
         // Event listener for the search button
-        searchButton.addEventListener('click', handleSearch);
+        searchButton.addEventListener('click', searchButtonClick);
 
         // Event listener for the logout button
         logoutButton.addEventListener('click', () => {

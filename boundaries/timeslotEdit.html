@@ -43,22 +43,29 @@
         // Handle form submission
         document.getElementById('editForm').addEventListener('submit', (event) => {
             event.preventDefault();
-            const formData = new FormData(event.target);
-            const data = {};
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
+            const clickSubmit = () => {
+                const formData = new FormData(event.target);
+                const data = {};
+                formData.forEach((value, key) => {
+                    data[key] = value;
+                });
 
-            // Send a PUT request to update the timeslot
-            fetch(`/timeslots/${window.location.href.substring(window.location.href.lastIndexOf('/') + 1)}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            }).then(() => {
-                alert('Timeslot updated successfully');
-            });
+                // Send a PUT request to update the timeslot
+                fetch(`/timeslots/${window.location.href.substring(window.location.href.lastIndexOf('/') + 1)}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                }).then(() => {
+                    const displaySuccessMessage = () => {
+                        if(alert('Timeslot updated successfully')){}
+                        else window.location.href = '/owner';
+                    }
+                    displaySuccessMessage();
+                });
+            };
+            clickSubmit();
         });
     </script>
 </body>
