@@ -130,7 +130,7 @@
                         const holder = document.createElement('div');
                         holder.id = 'buttonHolder';
                         item.id = 'weekItem';
-                        item.innerHTML = `<span><b>Shift</b>: ${timeslot.timeframe}</span><span><b>Date</b>: ${timeslot.date}</span><span><b>Bids</b>: ${timeslot.bids.length}</span>`;
+                        item.innerHTML = `<span><b>Timeslot ID</b>: ${timeslot.id}</span><span><b>Shift</b>: ${timeslot.timeframe}</span><span><b>Date</b>: ${timeslot.date}</span><span><b>Bids</b>: ${timeslot.bids.length}</span>`;
                         const editButton = document.createElement('button');
                         editButton.id = 'opButton';
                         editButton.onclick = () => {

@@ -79,7 +79,7 @@
                             detailsButton.onclick = () => { window.location.href = `/owner/edit/${timeslot.id}`; };
                             deleteButton.onclick = () => { clickDeleteButton(timeslot.id); };
                             item.id = 'weekItem';
-                            item.innerHTML = `<span><b>Shift</b>: ${timeslot.id}</span><span><b>Shift</b>: ${timeslot.timeframe}</span><span><b>Date</b>: ${timeslot.date}<span>`;
+                            item.innerHTML = `<span><b>ID</b>: ${timeslot.id}</span><span><b>Shift</b>: ${timeslot.timeframe}</span><span><b>Date</b>: ${timeslot.date}<span>`;
                             item.appendChild(detailsButton);
                             item.appendChild(deleteButton);
                             listItem.append(item);
