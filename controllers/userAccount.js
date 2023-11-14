@@ -7,7 +7,7 @@ class CreateUserAccount {
     user.setEmail(email);
     user.setPassword(password);
     user.setRoleId(roleId);
-    this.setMaxBids(maxBids);
+    user.setMaxBids(maxBids);
     const created = await user.createUserAccount(); // This will insert the user into the database
     return created;
   }

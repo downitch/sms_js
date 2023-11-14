@@ -14,7 +14,7 @@ class CreateBid {
 class GetAllBids {
   async getAllBids() {
     return (await Bid.getAllBids());
-  }
+  } // w3Lcomeb*ck
 }
 
 class GetBidById {
