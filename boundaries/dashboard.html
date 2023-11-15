@@ -52,6 +52,9 @@
 </head>
 <body>
     <h1>Timeslots List</h1>
+    <button id="logoutButton">Log Out</button>
+    <br />
+    <br />
     <input type="text" id="searchInput" placeholder="Search by Timeslot ID">
     <button id="searchButton">Search</button>
     <span>Max Bids: </span>
@@ -63,6 +66,7 @@
     <script>
         const searchInput = document.getElementById('searchInput');
         const searchButton = document.getElementById('searchButton');
+        const logoutButton = document.getElementById('logoutButton');
         const updateButton = document.getElementById('updateButton');
         const timeslotList = document.getElementById('weeksWrap');
         const timeslotDetails = document.getElementById('timeslotDetails');
@@ -263,7 +267,7 @@
         };
 
         // Function to handle search
-        const handleSearch = () => {
+        const clickSearch = () => {
             const timeslotId = parseInt(searchInput.value, 10);
 
             // If a valid number is entered, fetch and display timeslot details
@@ -289,7 +293,12 @@
         };
 
         // Event listener for the search button
-        searchButton.addEventListener('click', handleSearch);
+        searchButton.addEventListener('click', clickSearch);
+
+        // Event listener for the logout button
+        logoutButton.addEventListener('click', () => {
+            window.location.href = '/login';
+        });
 
         // Event listener for Enter key in the search input
         searchInput.addEventListener('keyup', (event) => {

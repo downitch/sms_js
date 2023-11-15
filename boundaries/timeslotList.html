@@ -43,6 +43,9 @@
 </head>
 <body>
     <h1>Owner's Timeslots List</h1>
+    <button id="logoutButton">Log Out</button>
+    <br />
+    <br />
     <input type="text" id="searchInput" placeholder="Search by Timeslot ID">
     <button id="searchButton">Search</button>
     <button id="createNewTimeslot">Create New Timeslot</button>
@@ -52,6 +55,7 @@
     <script>
         const searchInput = document.getElementById('searchInput');
         const searchButton = document.getElementById('searchButton');
+        const logoutButton = document.getElementById('logoutButton');
         const createButton = document.getElementById('createNewTimeslot');
         const timeslotList = document.getElementById('weeksWrap');
         const timeslotDetails = document.getElementById('timeslotDetails');
@@ -158,6 +162,11 @@
         // Event listener for the create button
         createButton.addEventListener('click', () => {
             window.location.href = '/owner/create'
+        });
+
+        // Event listener for the logout button
+        logoutButton.addEventListener('click', () => {
+            window.location.href = '/login';
         });
 
         // Event listener for Enter key in the search input
