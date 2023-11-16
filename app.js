@@ -2,8 +2,35 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const {CreateUserAccount, GetAllUserAccounts, GetUserAccountById, UpdateUserAccount, DeleteUserAccount, AuthenticateUserAccount} = require('./controllers/userAccount.js');
 const {CreateRole, GetAllRoles, GetRoleById, UpdateRole, DeleteRole} = require('./controllers/role.js');
-const {CreateTimeslot, GetAllTimeslots, GetTimeslotById, UpdateTimeslot, DeleteTimeslot} = require('./controllers/timeslot.js');
-const {CreateBid, GetAllBids, GetBidById, UpdateBid, DeleteBid} = require('./controllers/bid.js');
+const {
+  StaffCreateTimeslot,
+  ManagerCreateTimeslot,
+  OwnerCreateTimeslot,
+  StaffGetAllTimeslots, 
+  ManagerGetAllTimeslots, 
+  OwnerGetAllTimeslots, 
+  StaffGetTimeslotById, 
+  ManagerGetTimeslotById, 
+  OwnerGetTimeslotById, 
+  StaffUpdateTimeslot,
+  ManagerUpdateTimeslot,
+  OwnerUpdateTimeslot,
+  StaffDeleteTimeslot,
+  ManagerDeleteTimeslot,
+  OwnerDeleteTimeslot
+} = require('./controllers/timeslot.js');
+const {
+  StaffCreateBid,
+  ManagerCreateBid,
+  StaffGetAllBids,
+  ManagerGetAllBids,
+  StaffGetBidById,
+  ManagerGetBidById,
+  StaffUpdateBid,
+  ManagerUpdateBid,
+  StaffDeleteBid,
+  ManagerDeleteBid
+} = require('./controllers/bid.js');
 
 const app = express();
 const port = 3000;
@@ -131,82 +158,193 @@ app.post('/user-accounts/login', async (req, res) => {
 });
 
 // Create a new timeslot
-app.post('/timeslots', async (req, res) => {
+app.post('/staff-timeslots', async (req, res) => {
   const { timeframe, date } = req.body;
-  const createTimeslot = new CreateTimeslot();
-  const created = await createTimeslot.createTimeslot(timeframe, date);
+  const createTimeslot = new StaffCreateTimeslot();
+  const created = await createTimeslot.staffCreateTimeslot(timeframe, date);
+  res.json({success: created});
+});
+
+// Create a new timeslot
+app.post('/manager-timeslots', async (req, res) => {
+  const { timeframe, date } = req.body;
+  const createTimeslot = new ManagerCreateTimeslot();
+  const created = await createTimeslot.managerCreateTimeslot(timeframe, date);
+  res.json({success: created});
+});
+
+// Create a new timeslot
+app.post('/owner-timeslots', async (req, res) => {
+  const { timeframe, date } = req.body;
+  const createTimeslot = new OwnerCreateTimeslot();
+  const created = await createTimeslot.ownerCreateTimeslot(timeframe, date);
   res.json({success: created});
 });
   
 // Get all timeslots
-app.get('/timeslots', async (req, res) => {
-  const getAllTimeslots = new GetAllTimeslots();
-  const timeslots = await getAllTimeslots.getAllTimeslots();
+app.get('/staff-timeslots', async (req, res) => {
+  const getAllTimeslots = new StaffGetAllTimeslots();
+  const timeslots = await getAllTimeslots.staffGetAllTimeslots();
+  res.json(timeslots);
+});
+
+// Get all timeslots
+app.get('/manager-timeslots', async (req, res) => {
+  const getAllTimeslots = new ManagerGetAllTimeslots();
+  const timeslots = await getAllTimeslots.managerGetAllTimeslots();
+  res.json(timeslots);
+});
+
+// Get all timeslots
+app.get('/owner-timeslots', async (req, res) => {
+  const getAllTimeslots = new OwnerGetAllTimeslots();
+  const timeslots = await getAllTimeslots.ownerGetAllTimeslots();
   res.json(timeslots);
 });
   
 // Get a timeslot by ID
-app.get('/timeslots/:timeslotId', async (req, res) => {
+app.get('/staff-timeslots/:timeslotId', async (req, res) => {
   const timeslotId = parseInt(req.params.timeslotId, 10);
-  const getTimeslotById = new GetTimeslotById();
-  const timeslot = await getTimeslotById.getTimeslotById(timeslotId);
+  const getTimeslotById = new StaffGetTimeslotById();
+  const timeslot = await getTimeslotById.staffGetTimeslotById(timeslotId);
+  res.json(timeslot);
+});
+
+// Get a timeslot by ID
+app.get('/manager-timeslots/:timeslotId', async (req, res) => {
+  const timeslotId = parseInt(req.params.timeslotId, 10);
+  const getTimeslotById = new ManagerGetTimeslotById();
+  const timeslot = await getTimeslotById.managerGetTimeslotById(timeslotId);
+  res.json(timeslot);
+});
+
+// Get a timeslot by ID
+app.get('/owner-timeslots/:timeslotId', async (req, res) => {
+  const timeslotId = parseInt(req.params.timeslotId, 10);
+  const getTimeslotById = new OwnerGetTimeslotById();
+  const timeslot = await getTimeslotById.ownerGetTimeslotById(timeslotId);
   res.json(timeslot);
 });
   
 // Update a timeslot
-app.put('/timeslots/:timeslotId', async (req, res) => {
+app.put('/staff-timeslots/:timeslotId', async (req, res) => {
   const timeslotId = parseInt(req.params.timeslotId, 10);
   const { timeframe, date } = req.body;
-  const updateTimeslot = new UpdateTimeslot();
-  const timeslot = await updateTimeslot.updateTimeslot(timeslotId, timeframe, date);
+  const updateTimeslot = new StaffUpdateTimeslot();
+  const timeslot = await updateTimeslot.staffUpdateTimeslot(timeslotId, timeframe, date);
+  res.json(timeslot);
+});
+
+app.put('/manager-timeslots/:timeslotId', async (req, res) => {
+  const timeslotId = parseInt(req.params.timeslotId, 10);
+  const { timeframe, date } = req.body;
+  const updateTimeslot = new ManagerUpdateTimeslot();
+  const timeslot = await updateTimeslot.managerUpdateTimeslot(timeslotId, timeframe, date);
+  res.json(timeslot);
+});
+
+app.put('/owner-timeslots/:timeslotId', async (req, res) => {
+  const timeslotId = parseInt(req.params.timeslotId, 10);
+  const { timeframe, date } = req.body;
+  const updateTimeslot = new OwnerUpdateTimeslot();
+  const timeslot = await updateTimeslot.ownerUpdateTimeslot(timeslotId, timeframe, date);
   res.json(timeslot);
 });
   
 // Delete a timeslot
-app.delete('/timeslots/:timeslotId', async (req, res) => {
+app.delete('/staff-timeslots/:timeslotId', async (req, res) => {
   const timeslotId = parseInt(req.params.timeslotId, 10);
-  const deleteTimeslot = new DeleteTimeslot();
-  await deleteTimeslot.deleteTimeslot(timeslotId);
+  const deleteTimeslot = new StaffDeleteTimeslot();
+  await deleteTimeslot.staffDeleteTimeslot(timeslotId);
+  res.sendStatus(204);
+});
+
+app.delete('/manager-timeslots/:timeslotId', async (req, res) => {
+  const timeslotId = parseInt(req.params.timeslotId, 10);
+  const deleteTimeslot = new ManagerDeleteTimeslot();
+  await deleteTimeslot.managerDeleteTimeslot(timeslotId);
+  res.sendStatus(204);
+});
+
+app.delete('/owner-timeslots/:timeslotId', async (req, res) => {
+  const timeslotId = parseInt(req.params.timeslotId, 10);
+  const deleteTimeslot = new OwnerDeleteTimeslot();
+  await deleteTimeslot.ownerDeleteTimeslot(timeslotId);
   res.sendStatus(204);
 });
 
 // Create a new bid
-app.post('/bids', async (req, res) => {
+app.post('/staff-bids', async (req, res) => {
   const { bidOn, bidBy, approved, reviewedBy } = req.body;
-  const createBid = new CreateBid();
-  const bid = await createBid.createBid(bidOn, bidBy, approved, reviewedBy);
+  const createBid = new StaffCreateBid();
+  const bid = await createBid.staffCreateBid(bidOn, bidBy, approved, reviewedBy);
+  res.json(bid);
+});
+
+app.post('/manager-bids', async (req, res) => {
+  const { bidOn, bidBy, approved, reviewedBy } = req.body;
+  const createBid = new ManagerCreateBid();
+  const bid = await createBid.managerCreateBid(bidOn, bidBy, approved, reviewedBy);
   res.json(bid);
 });
   
 // Get all bids
-app.get('/bids', async (req, res) => {
-  const getAllBids = new GetAllBids();
-  const bids = await getAllBids.getAllBids();
+app.get('/staff-bids', async (req, res) => {
+  const getAllBids = new StaffGetAllBids();
+  const bids = await getAllBids.staffGetAllBids();
+  res.json(bids);
+});
+
+app.get('/manager-bids', async (req, res) => {
+  const getAllBids = new ManagerGetAllBids();
+  const bids = await getAllBids.managerGetAllBids();
   res.json(bids);
 });
   
 // Get a bid by ID
-app.get('/bids/:bidId', async (req, res) => {
+app.get('/staff-bids/:bidId', async (req, res) => {
   const bidId = parseInt(req.params.bidId, 10);
-  const getBidById = new GetBidById();
-  const bid = await getBidById.getBidById(bidId);
+  const getBidById = new StaffGetBidById();
+  const bid = await getBidById.staffGetBidById(bidId);
+  res.json(bid);
+});
+
+app.get('/manager-bids/:bidId', async (req, res) => {
+  const bidId = parseInt(req.params.bidId, 10);
+  const getBidById = new ManagerGetBidById();
+  const bid = await getBidById.managerGetBidById(bidId);
   res.json(bid);
 });
   
 // Update a bid
-app.put('/bids/:bidId', async (req, res) => {
+app.put('/staff-bids/:bidId', async (req, res) => {
   const bidId = parseInt(req.params.bidId, 10);
   const { bidOn, bidBy, approved, reviewedBy } = req.body;
-  const updateBid = new UpdateBid();
-  const bid = await updateBid.updateBid(bidId, bidOn, bidBy, approved, reviewedBy);
+  const updateBid = new StaffUpdateBid();
+  const bid = await updateBid.staffUpdateBid(bidId, bidOn, bidBy, approved, reviewedBy);
+  res.json(bid);
+});
+
+app.put('/manager-bids/:bidId', async (req, res) => {
+  const bidId = parseInt(req.params.bidId, 10);
+  const { bidOn, bidBy, approved, reviewedBy } = req.body;
+  const updateBid = new ManagerUpdateBid();
+  const bid = await updateBid.managerUpdateBid(bidId, bidOn, bidBy, approved, reviewedBy);
   res.json(bid);
 });
   
 // Delete a bid
-app.delete('/bids/:bidId', async (req, res) => {
+app.delete('/staff-bids/:bidId', async (req, res) => {
   const bidId = parseInt(req.params.bidId, 10);
-  const deleteBid = new DeleteBid();
-  await deleteBid.deleteBid(bidId);
+  const deleteBid = new StaffDeleteBid();
+  await deleteBid.staffDeleteBid(bidId);
+  res.sendStatus(204);
+});
+
+app.delete('/manager-bids/:bidId', async (req, res) => {
+  const bidId = parseInt(req.params.bidId, 10);
+  const deleteBid = new ManagerDeleteBid();
+  await deleteBid.managerDeleteBid(bidId);
   res.sendStatus(204);
 });
 

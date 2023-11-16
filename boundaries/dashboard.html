@@ -92,7 +92,7 @@
         }
 
         const displayTimeslots = () => {
-            return fetch('/timeslots');
+            return fetch('/staff-timeslots');
         }
 
         const displayBids = () => {
@@ -100,7 +100,7 @@
             displayTimeslots()
             .then(response => response.json())
             .then(timeslots => {
-                fetch('/bids')
+                fetch('/staff-bids')
                     .then(response => response.json())
                     .then(bids => {
                         const readyData = timeslots.map(timeslot => {
@@ -215,7 +215,7 @@
             };
 
             // Send the POST request to create the bid
-            fetch('/bids', {
+            fetch('/staff-bids', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -243,7 +243,7 @@
             event.preventDefault();
 
             // Send the DELETE request to delete the bid
-            fetch(`/bids/${event.target.bidId}`, {
+            fetch(`/staff-bids/${event.target.bidId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -272,7 +272,7 @@
 
             // If a valid number is entered, fetch and display timeslot details
             if (!isNaN(timeslotId)) {
-                fetch(`/timeslots/${timeslotId}`)
+                fetch(`/staff-timeslots/${timeslotId}`)
                     .then(response => {
                         if (response.status === 200) {
                             return response.json();

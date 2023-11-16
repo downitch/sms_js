@@ -62,7 +62,7 @@
 
         const displayTimeslots = () => {
             // Fetch and display the list of timeslots
-            fetch('/timeslots')
+            fetch('/owner-timeslots')
                 .then(response => response.json())
                 .then(timeslots => {
                     const split = timeslots.reduce((all,one,i) => {
@@ -104,7 +104,7 @@
 
             // If a valid number is entered, fetch and display timeslot details
             if (!isNaN(timeslotId)) {
-                fetch(`/timeslots/${timeslotId}`)
+                fetch(`/owner-timeslots/${timeslotId}`)
                     .then(response => {
                         if (response.status === 200) {
                             return response.json();
@@ -130,7 +130,7 @@
         };
 
         const clickDeleteButton = (timeslotId) => {
-            fetch(`/timeslots/${timeslotId}`, {
+            fetch(`/owner-timeslots/${timeslotId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

@@ -38,7 +38,7 @@
         const clickSubmit = () => {
             const timeframeInput = document.getElementById('timeframe');
             const dateInput = document.getElementById('date');
-            fetch('/timeslots', {
+            fetch('/owner-timeslots', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

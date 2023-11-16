@@ -72,10 +72,10 @@
         fetch('/user-accounts')
           .then(response => response.json())
           .then(users => {
-            fetch('/timeslots')
+            fetch('/manager-timeslots')
               .then(response => response.json())
               .then(timeslots => {
-                fetch('/bids')
+                fetch('/manager-bids')
                   .then(response => response.json())
                   .then(bids => {
                     timeslots.map(timeslot => {
@@ -171,7 +171,7 @@
 
         const clickApprove = () => {
             const updatedBidData = JSON.parse(window.localStorage.getItem("bidData"));
-            fetch(`/bids/${updatedBidData.id}`, {
+            fetch(`/manager-bids/${updatedBidData.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -194,7 +194,7 @@
 
         const clickReject = () => {
             const updatedBidData = JSON.parse(window.localStorage.getItem("bidData"));
-            fetch(`/bids/${updatedBidData.id}`, {
+            fetch(`/manager-bids/${updatedBidData.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
