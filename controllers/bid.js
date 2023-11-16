@@ -28,6 +28,12 @@ class StaffGetAllBids {
   } // w3Lcomeb*ck
 }
 
+class StaffGetProcessedBids {
+  async staffGetProcessedBids() {
+    return (await Bid.getAllBids());
+  } // w3Lcomeb*ck
+}
+
 class ManagerGetAllBids {
   async managerGetAllBids() {
     return (await Bid.getAllBids());
@@ -95,6 +101,7 @@ module.exports = {
   ManagerCreateBid,
   StaffGetAllBids,
   ManagerGetAllBids,
+  StaffGetProcessedBids,
   StaffGetBidById,
   ManagerGetBidById,
   StaffUpdateBid,

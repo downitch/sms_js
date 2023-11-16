@@ -40,6 +40,7 @@ const {
   StaffCreateBid,
   ManagerCreateBid,
   StaffGetAllBids,
+  StaffGetProcessedBids,
   ManagerGetAllBids,
   StaffGetBidById,
   ManagerGetBidById,
@@ -379,6 +380,13 @@ app.post('/manager-bids', async (req, res) => {
 app.get('/staff-bids', async (req, res) => {
   const getAllBids = new StaffGetAllBids();
   const bids = await getAllBids.staffGetAllBids();
+  res.json(bids);
+});
+
+// Get all bids
+app.get('/staff-processed-bids', async (req, res) => {
+  const getAllBids = new StaffGetProcessedBids();
+  const bids = await getAllBids.staffGetProcessedBids();
   res.json(bids);
 });
 
