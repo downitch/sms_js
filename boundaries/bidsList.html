@@ -31,8 +31,8 @@
       #weekItem {
         display: flex;
         flex-direction: column;
-        width: 270px;
-        height: 188px;
+        width: 18vw;
+        min-height: 188px;
         border: 1px solid black;
         border-radius: 5px;
         margin-right: 10px;
@@ -69,7 +69,7 @@
         const timeslotList = document.getElementById('weeksWrap');
         const logoutButton = document.getElementById('logoutButton');
 
-        fetch('/user-accounts')
+        fetch('/manager-user-accounts')
           .then(response => response.json())
           .then(users => {
             fetch('/manager-timeslots')

@@ -64,7 +64,7 @@
         const userDetails = document.getElementById('userDetails');
 
         const displayUserAccounts = () => {
-            fetch('/user-accounts')
+            fetch('/admin-user-accounts')
             .then(response => response.json())
             .then(users => {
                 users.forEach(user => {
@@ -92,7 +92,7 @@
         displayUserAccounts();
 
         const clickDeleteButton = (userId) => {
-            fetch(`/user-accounts/${userId}`, {
+            fetch(`/admin-user-accounts/${userId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -124,7 +124,7 @@
 
             // If a valid number is entered, fetch and display user details
             if (!isNaN(userId)) {
-                fetch(`/user-accounts/${userId}`)
+                fetch(`/admin-user-accounts/${userId}`)
                     .then(response => {
                         if (response.status === 200) {
                             return response.json();

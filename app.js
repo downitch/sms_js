@@ -1,7 +1,24 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const {CreateUserAccount, GetAllUserAccounts, GetUserAccountById, UpdateUserAccount, DeleteUserAccount, AuthenticateUserAccount} = require('./controllers/userAccount.js');
 const {CreateRole, GetAllRoles, GetRoleById, UpdateRole, DeleteRole} = require('./controllers/role.js');
+const {
+  AdminCreateUserAccount,
+  ManagerCreateUserAccount,
+  StaffCreateUserAccount,
+  AdminGetAllUserAccounts,
+  ManagerGetAllUserAccounts,
+  StaffGetAllUserAccounts,
+  AdminGetUserAccountById,
+  ManagerGetUserAccountById,
+  StaffGetUserAccountById,
+  AdminUpdateUserAccount,
+  ManagerUpdateUserAccount,
+  StaffUpdateUserAccount,
+  AdminDeleteUserAccount,
+  ManagerDeleteUserAccount,
+  StaffDeleteUserAccount,
+  AuthenticateUserAccount
+} = require('./controllers/userAccount.js');
 const {
   StaffCreateTimeslot,
   ManagerCreateTimeslot,
@@ -110,42 +127,112 @@ app.get('/login', async (req, res) => {
 // V
 
 // Create a new user account
-app.post('/user-accounts', async (req, res) => {
+app.post('/admin-user-accounts', async (req, res) => {
   const { username, email, password, roleId, maxBids } = req.body;
-  const createUserAccount = new CreateUserAccount();
-  const created = await createUserAccount.createUserAccount(username, email, password, parseInt(roleId, 10), parseInt(maxBids, 10));
+  const createUserAccount = new AdminCreateUserAccount();
+  const created = await createUserAccount.adminCreateUserAccount(username, email, password, parseInt(roleId, 10), parseInt(maxBids, 10));
+  res.json({success: created});
+});
+
+app.post('/manager-user-accounts', async (req, res) => {
+  const { username, email, password, roleId, maxBids } = req.body;
+  const createUserAccount = new ManagerCreateUserAccount();
+  const created = await createUserAccount.managerCreateUserAccount(username, email, password, parseInt(roleId, 10), parseInt(maxBids, 10));
+  res.json({success: created});
+});
+
+app.post('/staff-user-accounts', async (req, res) => {
+  const { username, email, password, roleId, maxBids } = req.body;
+  const createUserAccount = new StaffCreateUserAccount();
+  const created = await createUserAccount.staffCreateUserAccount(username, email, password, parseInt(roleId, 10), parseInt(maxBids, 10));
   res.json({success: created});
 });
 
 // Get all user accounts
-app.get('/user-accounts', async (req, res) => {
-  const getAllUserAccounts = new GetAllUserAccounts();
-  const users = await getAllUserAccounts.getAllUserAccounts();
+app.get('/admin-user-accounts', async (req, res) => {
+  const getAllUserAccounts = new AdminGetAllUserAccounts();
+  const users = await getAllUserAccounts.adminGetAllUserAccounts();
+  res.json(users);
+});
+
+app.get('/manager-user-accounts', async (req, res) => {
+  const getAllUserAccounts = new ManagerGetAllUserAccounts();
+  const users = await getAllUserAccounts.managerGetAllUserAccounts();
+  res.json(users);
+});
+
+app.get('/staff-user-accounts', async (req, res) => {
+  const getAllUserAccounts = new StaffGetAllUserAccounts();
+  const users = await getAllUserAccounts.staffGetAllUserAccounts();
   res.json(users);
 });
 
 // Get a user account by ID
-app.get('/user-accounts/:userId', async (req, res) => {
+app.get('/admin-user-accounts/:userId', async (req, res) => {
   const userId = parseInt(req.params.userId, 10);
-  const getUserAccountById = new GetUserAccountById();
-  const user = await getUserAccountById.getUserAccountById(userId);
+  const getUserAccountById = new AdminGetUserAccountById();
+  const user = await getUserAccountById.adminGetUserAccountById(userId);
+  res.json(user);
+});
+
+app.get('/manager-user-accounts/:userId', async (req, res) => {
+  const userId = parseInt(req.params.userId, 10);
+  const getUserAccountById = new ManagerGetUserAccountById();
+  const user = await getUserAccountById.managerGetUserAccountById(userId);
+  res.json(user);
+});
+
+app.get('/staff-user-accounts/:userId', async (req, res) => {
+  const userId = parseInt(req.params.userId, 10);
+  const getUserAccountById = new StaffGetUserAccountById();
+  const user = await getUserAccountById.staffGetUserAccountById(userId);
   res.json(user);
 });
 
 // Update a user account
-app.put('/user-accounts/:userId', async (req, res) => {
+app.put('/admin-user-accounts/:userId', async (req, res) => {
   const userId = parseInt(req.params.userId, 10);
   const { username, email, password, roleId, maxBids } = req.body;
-  const updateUserAccount = new UpdateUserAccount();
-  const user = await updateUserAccount.updateUserAccount(userId, username, email, password, parseInt(roleId, 10), parseInt(maxBids, 10));
+  const updateUserAccount = new AdminUpdateUserAccount();
+  const user = await updateUserAccount.adminUpdateUserAccount(userId, username, email, password, parseInt(roleId, 10), parseInt(maxBids, 10));
+  res.json(user);
+});
+
+app.put('/manager-user-accounts/:userId', async (req, res) => {
+  const userId = parseInt(req.params.userId, 10);
+  const { username, email, password, roleId, maxBids } = req.body;
+  const updateUserAccount = new ManagerUpdateUserAccount();
+  const user = await updateUserAccount.managerUpdateUserAccount(userId, username, email, password, parseInt(roleId, 10), parseInt(maxBids, 10));
+  res.json(user);
+});
+
+app.put('/staff-user-accounts/:userId', async (req, res) => {
+  const userId = parseInt(req.params.userId, 10);
+  const { username, email, password, roleId, maxBids } = req.body;
+  const updateUserAccount = new StaffUpdateUserAccount();
+  const user = await updateUserAccount.staffUpdateUserAccount(userId, username, email, password, parseInt(roleId, 10), parseInt(maxBids, 10));
   res.json(user);
 });
 
 // Delete a user account
-app.delete('/user-accounts/:userId', async (req, res) => {
+app.delete('/admin-user-accounts/:userId', async (req, res) => {
   const userId = parseInt(req.params.userId, 10);
-  const deleteUserAccount = new DeleteUserAccount();
-  await deleteUserAccount.deleteUserAccount(userId);
+  const deleteUserAccount = new AdminDeleteUserAccount();
+  await deleteUserAccount.adminDeleteUserAccount(userId);
+  res.sendStatus(204);
+});
+
+app.delete('/manager-user-accounts/:userId', async (req, res) => {
+  const userId = parseInt(req.params.userId, 10);
+  const deleteUserAccount = new ManagerDeleteUserAccount();
+  await deleteUserAccount.managerDeleteUserAccount(userId);
+  res.sendStatus(204);
+});
+
+app.delete('/staff-user-accounts/:userId', async (req, res) => {
+  const userId = parseInt(req.params.userId, 10);
+  const deleteUserAccount = new StaffDeleteUserAccount();
+  await deleteUserAccount.staffDeleteUserAccount(userId);
   res.sendStatus(204);
 });
 

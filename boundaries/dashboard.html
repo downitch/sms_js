@@ -74,7 +74,7 @@
         const userId = parseInt(window.location.href.substring(window.location.href.lastIndexOf('/') + 1), 10);
         // If a valid number is entered, fetch and display user details
         if (!isNaN(userId)) {
-            fetch(`/user-accounts/${userId}`)
+            fetch(`/staff-user-accounts/${userId}`)
                 .then(response => {
                     if (response.status === 200) {
                         return response.json();
@@ -179,7 +179,7 @@
                 maxBids: parseInt(document.getElementById('updateInput').value, 10)
             };
             if (reqData.maxBids >= 10) {
-                fetch(`/user-accounts/${window.location.href.substring(window.location.href.lastIndexOf('/') + 1)}`, {
+                fetch(`/staff-user-accounts/${window.location.href.substring(window.location.href.lastIndexOf('/') + 1)}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

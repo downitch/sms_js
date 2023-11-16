@@ -43,7 +43,7 @@
 
     <script>
         // Fetch user account data and populate the form
-        fetch(`/user-accounts/${window.location.href.substring(window.location.href.lastIndexOf('/') + 1)}`)
+        fetch(`/admin-user-accounts/${window.location.href.substring(window.location.href.lastIndexOf('/') + 1)}`)
             .then(response => response.json())
             .then(user => {
                 document.getElementById('username').value = user.username;
@@ -64,7 +64,7 @@
                 });
 
                 // Send a PUT request to update the user account
-                fetch(`/user-accounts/${window.location.href.substring(window.location.href.lastIndexOf('/') + 1)}`, {
+                fetch(`/admin-user-accounts/${window.location.href.substring(window.location.href.lastIndexOf('/') + 1)}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
