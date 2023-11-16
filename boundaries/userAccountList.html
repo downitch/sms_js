@@ -73,7 +73,7 @@
                     const deleteUA = document.createElement('div');
                     userInfo.id = 'infoField';
                     deleteUA.id = 'deleteButton';
-                    userInfo.innerHTML = `<span><b>User ID</b>: ${user.id}<br /><b>Username</b>: ${user.username}<br /><b>Email</b>: ${user.email}<br /><b>Role ID</b>: ${user.roleId}</span>`;
+                    userInfo.innerHTML = `<span><b>User ID</b>: ${user.id}<br /><b>Username</b>: ${user.username}<br /><b>Email</b>: ${user.email}<br /><b>Role ID</b>: ${user.roleId}<br /><b>Role</b>: ${user.roleId == 4 ? 'Admin' : user.roleId == 2 ? 'Owner' : user.roleId == 3 ? 'Manager' : 'Staff'}</span>`;
                     userInfo.addEventListener('click', () => {
                         window.location.href = `/admin/edit/${user.id}`;
                     });
@@ -102,7 +102,7 @@
                 const displaySuccessMessage = () => {
                     if (response.status === 204) {
                         // User deleted successfully
-                        if(alert('User deleted successfully')){}
+                        if(alert('Account deleted successfully')){}
                         else window.location.reload();
                     } else {
                         // Handle errors or display a message
@@ -137,7 +137,7 @@
                         const displayUserAccount = () => {
                             userDetails.style.display = 'block';
                             userList.style.display = 'none';
-                            userDetails.innerHTML = `<span><b>User ID</b>: ${user.id}<br /><b>Username</b>: ${user.username}<br /><b>Email</b>: ${user.email}<br /><b>Role ID</b>: ${user.roleId}</span>`;;
+                            userDetails.innerHTML = `<span><b>User ID</b>: ${user.id}<br /><b>Username</b>: ${user.username}<br /><b>Email</b>: ${user.email}<br /><b>Role ID</b>: ${user.roleId}<br /><b>Role</b>: ${user.roleId == 4 ? 'Admin' : user.roleId == 2 ? 'Owner' : user.roleId == 3 ? 'Manager' : 'Staff'}</span>`;;
                         };
                         displayUserAccount();
                     })

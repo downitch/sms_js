@@ -11,11 +11,11 @@ db.run(`
 `);
 
 // Generate 10 random timeslots
-const startDate = new Date('2023-11-09');
-const endDate = new Date('2023-11-22');
+const startDate = new Date('2023-11-20');
+const endDate = new Date('2024-02-28');
 const timeframes = ['8AM-6PM', '3PM-11PM'];
 
-for (let i = 1; i <= 10; i++) {
+for (let i = 1; i <= 100; i++) {
   const randomDate = new Date(startDate.getTime() + Math.random() * (endDate.getTime() - startDate.getTime()));
   const timeframe = timeframes[Math.floor(Math.random() * timeframes.length)];
 

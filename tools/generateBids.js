@@ -13,9 +13,9 @@ db.run(`
 `);
 
 // Generate 10 random bids with bidBy from 1 to 10, approved set to false, and reviewedBy left NULL
-for (let i = 1; i <= 10; i++) {
-  const bidOn = Math.floor(Math.random() * 10) + 1;
-  const bidBy = Math.floor(Math.random() * 10) + 1;
+for (let i = 1; i <= 100; i++) {
+  const bidOn = Math.floor(Math.random() * 100) + 1;
+  const bidBy = Math.floor(Math.random() * 100) + 1;
 
   db.run(`
     INSERT INTO bids (bidOn, bidBy, approved, reviewedBy)
