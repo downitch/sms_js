@@ -69,7 +69,7 @@ class StaffUpdateTimeslot {
     timeslot.setId(timeslotId);
     timeslot.setTimeframe(timeframe);
     timeslot.setDate(date);
-    await timeslot.editTimeslot(); // This will update the timeslot in the database
+    await timeslot.updateTimeslot(); // This will update the timeslot in the database
     return timeslot;
   }
 }
@@ -80,7 +80,7 @@ class ManagerUpdateTimeslot {
     timeslot.setId(timeslotId);
     timeslot.setTimeframe(timeframe);
     timeslot.setDate(date);
-    await timeslot.editTimeslot(); // This will update the timeslot in the database
+    await timeslot.updateTimeslot(); // This will update the timeslot in the database
     return timeslot;
   }
 }
@@ -91,7 +91,7 @@ class OwnerUpdateTimeslot {
     timeslot.setId(timeslotId);
     timeslot.setTimeframe(timeframe);
     timeslot.setDate(date);
-    await timeslot.editTimeslot(); // This will update the timeslot in the database
+    await timeslot.updateTimeslot(); // This will update the timeslot in the database
     return timeslot;
   }
 }

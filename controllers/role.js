@@ -25,7 +25,7 @@ class UpdateRole {
     const role = new Role();
     role.setId(roleId);
     role.setRoleName(roleName);
-    await role.editRole(); // This will update the role in the database
+    await role.updateRole(); // This will update the role in the database
     return role;
   }
 }

@@ -58,7 +58,7 @@ class Role {
     return true;
   }
 
-  editRole() {
+  updateRole() {
     const db = new sqlite3.Database(pathToDatabase);
     db.run('UPDATE roles SET roleName = ? WHERE id = ?', [this.roleName, this.id], (err) => {
       if (err) {

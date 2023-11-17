@@ -73,7 +73,7 @@ class Bid {
     return true;
   }
 
-  editBid() {
+  updateBid() {
     const db = new sqlite3.Database(pathToDatabase);
     db.run('UPDATE bids SET bidOn = ?, bidBy = ?, approved = ?, reviewedBy = ? WHERE id = ?', [this.bidOn, this.bidBy, this.approved, this.reviewedBy, this.id], (err) => {
       if (err) {

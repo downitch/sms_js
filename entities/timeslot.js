@@ -63,7 +63,7 @@ class Timeslot {
     return true;
   }
 
-  editTimeslot() {
+  updateTimeslot() {
     const db = new sqlite3.Database(pathToDatabase);
     db.run('UPDATE timeslots SET timeframe = ?, date = ? WHERE id = ?', [this.timeframe, this.date, this.id], (err) => {
       if (err) {

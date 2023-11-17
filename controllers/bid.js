@@ -60,7 +60,7 @@ class StaffUpdateBid {
     bid.setBidBy(bidBy);
     bid.setApproved(approved);
     bid.setReviewedBy(reviewedBy);
-    await bid.editBid(); // This will update the bid in the database
+    await bid.updateBid(); // This will update the bid in the database
     return bid;
   }
 }
@@ -73,7 +73,7 @@ class ManagerUpdateBid {
     bid.setBidBy(bidBy);
     bid.setApproved(approved);
     bid.setReviewedBy(reviewedBy);
-    await bid.editBid(); // This will update the bid in the database
+    await bid.updateBid(); // This will update the bid in the database
     return bid;
   }
 }
